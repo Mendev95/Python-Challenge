@@ -1,0 +1,43 @@
+import pandas as pd
+budget = pd.read_csv('budget_data.csv')
+print(budget)
+
+#Calculating numer of months
+print(f"number of months = {len(budget)}")
+months = len(budget)
+
+#The net total amount of "Profit/Losses" over the entire period
+net = 0
+for index, row in budget.iterrows():
+    net = net + row['Profit/Losses']
+print(net)    
+
+#The changes in "Profit/Losses" over the entire period, and then the average of those changes
+budget['net']=budget['Profit/Losses'].diff()
+budget
+print(round(budget['net'].mean(), 2))
+mean_net = round(budget['net'].mean(), 2)
+
+#The greatest increase in profits (date and amount) over the entire period
+maximum = budget['net'].max()
+for index, row in budget.iterrows():
+    if row['net']==maximum:
+        #print(row['Date'], row['net'])
+        max_date, max_net = row['Date'], row['net']
+max_net=int(max_net)
+
+#The greatest decrease in profits (date and amount) over the entire period
+minimum = budget['net'].min()
+for index, row in budget.iterrows():
+    if row['net']==minimum:
+        print(row['Date'], row['net'])
+        min_date, min_net = row['Date'], row['net']
+min_net = int(min_net)
+
+#Summary
+print("Financial Analysis \n---------------------------- \n")
+print("Total Months: "+ str(months))
+print("\nTotal: $"+str(net))
+print("\nAverage Change: $"+str(mean_net))
+print(f"\nGreatest Increase in Profits: {max_date} (${max_net})")
+print(f"\nGreatest Decrease in Profits: {min_date} (${min_net})")
