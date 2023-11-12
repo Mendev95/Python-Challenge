@@ -1,0 +1,36 @@
+import pandas as pd
+election = pd.read_csv('election_data.csv')
+print(election)
+
+#The total number of votes cast
+Total_votes = len(election)
+Total_votes
+
+#A complete list of candidates who received votes
+list=election['Candidate'].value_counts().rename_axis('Candidate').to_frame('counts')
+list
+
+#The percentage of votes each candidate won
+list['percentage']=round(list['counts']/Total_votes*100,3)
+list
+
+#The total number of votes each candidate won
+list=list.sort_values('Candidate')
+list
+
+#The winner of the election based on popular vote
+maximum = list['counts'].max()
+for index, row in list.iterrows():
+    if row['counts']==maximum:
+        max_name = index
+max_name
+
+#Summary
+print("Election Results \n---------------------------- \n")
+print("Total Votes: "+ str(Total_votes))
+print("\n----------------------------")
+for index, row in list.iterrows():
+    print(f"\n{index}: {row['percentage']}% ({int(row['counts'])})")
+    print("\n----------------------------")
+print("\nWinner: "+max_name)
+print("\n----------------------------")
